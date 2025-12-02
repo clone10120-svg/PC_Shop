@@ -1,70 +1,66 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../../config/db');
-const { isAdmin } = require('../../middleware/auth');
 
-// Trang danh sách sản phẩm (Admin) const upload = multer({ dest: 'uploads/' });
-router.get('/', isAdmin, (req, res) => {
-    db.query(`
-        SELECT products.*, categories.name AS category_name 
-        FROM products 
-        LEFT JOIN categories ON products.category_id = categories.id
-        ORDER BY products.id DESC
-    `, (err, products) => {
-        res.render('admin/products/index', { products });
-    });
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+const pool = require("../../config/db");
+const { isAdmin } = require("../../middleware/auth");
+
+// GET: admin list products
+router.get("/", isAdmin, async (req, res) => {
+    const [rows] = await pool.query("SELECT * FROM products ORDER BY id DESC");
+    res.render("admin/products", { products: rows });
 });
 
-// Form thêm sản phẩm
-router.get('/add', isAdmin, (req, res) => {
-    db.query("SELECT * FROM categories", (err, categories) => {
-        res.render('admin/products/add', { categories });
-    });
+// GET: create form
+router.get("/create", isAdmin, (req, res) => {
+    res.render("admin/product_form", { product: null });
 });
 
-// Submit thêm sản phẩm
-router.post('/add', isAdmin, (req, res) => {
-    const { name, price, discount, description, category_id } = req.body;
-    const slug = name.toLowerCase().replace(/ /g, '-');
+// POST: create product
+router.post("/create", isAdmin, upload.single("image"), async (req, res) => {
+    const { name, price, category_id } = req.body;
+    const image = req.file ? req.file.filename : null;
 
-    db.query(
-        "INSERT INTO products (name, slug, price, discount, description, category_id) VALUES (?, ?, ?, ?, ?, ?)",
-        [name, slug, price, discount, description, category_id],
-        () => res.redirect('/admin/products')
+    await pool.query(
+        "INSERT INTO products (name, price, category_id, image) VALUES (?, ?, ?, ?)",
+        [name, price, category_id, image]
     );
+
+    res.redirect("/admin/products");
 });
 
-// Form sửa sản phẩm
-router.get('/edit/:id', isAdmin, (req, res) => {
-    const id = req.params.id;
+// GET: edit
+router.get("/edit/:id", isAdmin, async (req, res) => {
+    const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [
+        req.params.id
+    ]);
 
-    db.query("SELECT * FROM products WHERE id = ?", [id], (err, product) => {
-        db.query("SELECT * FROM categories", (err, categories) => {
-            res.render('admin/products/edit', {
-                product: product[0],
-                categories
-            });
-        });
-    });
+    res.render("admin/product_form", { product: rows[0] });
 });
 
-// Submit sửa
-router.post('/edit/:id', isAdmin, (req, res) => {
-    const { name, price, discount, description, category_id } = req.body;
-    const id = req.params.id;
+// POST: update
+router.post("/edit/:id", isAdmin, upload.single("image"), async (req, res) => {
+    const { name, price, category_id } = req.body;
+    let image = req.body.old_image;
 
-    db.query(
-        "UPDATE products SET name=?, price=?, discount=?, description=?, category_id=? WHERE id=?",
-        [name, price, discount, description, category_id, id],
-        () => res.redirect('/admin/products')
+    if (req.file) {
+        image = req.file.filename;
+    }
+
+    await pool.query(
+        "UPDATE products SET name=?, price=?, category_id=?, image=? WHERE id=?",
+        [name, price, category_id, image, req.params.id]
     );
+
+    res.redirect("/admin/products");
 });
 
-// Xóa sản phẩm
-router.get('/delete/:id', isAdmin, (req, res) => {
-    db.query("DELETE FROM products WHERE id=?", [req.params.id], () => {
-        res.redirect('/admin/products');
-    });
+// DELETE
+router.get("/delete/:id", isAdmin, async (req, res) => {
+    await pool.query("DELETE FROM products WHERE id = ?", [req.params.id]);
+    res.redirect("/admin/products");
 });
 
 module.exports = router;

@@ -61,4 +61,8 @@ const adminProductRouter = require('./routes/admin/products');
 app.use('/admin/products', adminProductRouter);
 app.use('/admin/products', require('./routes/admin/products'));
 
+// sau khi đã khai báo express, session, flash, layouts...
+app.use('/auth', require('./routes/auth'));
+app.use('/admin/products', require('./routes/admin/products'));
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

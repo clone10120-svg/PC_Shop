@@ -1,4 +1,5 @@
 // routes/index.js
+// Thêm route admin vào app.js hoặc index.js
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');

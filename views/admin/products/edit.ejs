@@ -1,0 +1,57 @@
+<%- include('../layouts/main') %>
+
+<main class="container py-5">
+    <h1 class="mb-4">Chỉnh sửa sản phẩm</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Thông tin sản phẩm</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/products/edit/<%= product.id %>" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="<%= product.name %>" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" required><%= product.description %></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price" class="form-label">Giá ($)</label>
+                                <input type="number" step="0.01" class="form-control" id="price" 
+                                       name="price" value="<%= product.price %>" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="stock" class="form-label">Số lượng tồn kho</label>
+                                <input type="number" class="form-control" id="stock" 
+                                       name="stock" value="<%= product.stock %>" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Danh mục</label>
+                            <input type="text" class="form-control" id="category" 
+                                   name="category" value="<%= product.category %>" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="/admin/dashboard" class="btn btn-secondary">Quay lại</a>
+                            <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

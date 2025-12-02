@@ -1,0 +1,37 @@
+<% layout('layouts/main') %>
+
+<h2><%= product ? 'Sửa sản phẩm' : 'Thêm sản phẩm' %></h2>
+
+<form method="post" enctype="multipart/form-data" action="<%= product ? '/admin/products/edit/' + product.id : '/admin/products/add' %>">
+  <label>Tên</label>
+  <input name="name" value="<%= product ? product.name : '' %>" required>
+
+  <label>Slug (tùy chọn)</label>
+  <input name="slug" value="<%= product ? product.slug : '' %>">
+
+  <label>Giá</label>
+  <input name="price" type="number" value="<%= product ? product.price : 0 %>" required>
+
+  <label>Danh mục</label>
+  <select name="category_id">
+    <option value="">--Không--</option>
+    <% categories.forEach(c => { %>
+      <option value="<%= c.id %>" <%= product && product.category_id == c.id ? 'selected' : '' %>><%= c.name %></option>
+    <% }) %>
+  </select>
+
+  <label>Tồn kho</label>
+  <input name="stock" type="number" value="<%= product ? product.stock : 0 %>">
+
+  <label>Mô tả</label>
+  <textarea name="description"><%= product ? product.description : '' %></textarea>
+
+  <label>Ảnh</label>
+  <% if (product && product.image) { %>
+    <img src="<%= product.image %>" style="width:120px;height:90px;object-fit:cover"><br>
+    <input type="hidden" name="old_image" value="<%= product.image %>">
+  <% } %>
+  <input type="file" name="image" accept="image/*">
+
+  <button class="btn"><%= product ? 'Cập nhật' : 'Thêm' %></button>
+</form>

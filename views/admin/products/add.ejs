@@ -1,0 +1,21 @@
+<h2>Thêm sản phẩm</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="text" name="name" placeholder="Tên sản phẩm"><br>
+  <input type="text" name="slug" placeholder="slug"><br>
+  <input type="number" name="price" placeholder="Giá"><br>
+  <input type="number" name="stock" placeholder="Tồn kho" value="0"><br>
+
+  <select name="category_id">
+    <% categories.forEach(c => { %>
+      <option value="<%= c.id %>"><%= c.name %></option>
+    <% }) %>
+  </select>
+  <br>
+
+  <textarea name="description" placeholder="Mô tả"></textarea><br>
+
+  <input type="file" name="image"><br>
+
+  <button type="submit">Lưu</button>
+</form>

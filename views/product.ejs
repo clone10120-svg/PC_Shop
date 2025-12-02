@@ -1,0 +1,20 @@
+<div class="product-detail-wrap">
+  <div class="pd-left">
+    <img src="<%= product.image.startsWith('/') ? product.image : '/uploads/' + product.image %>" alt="<%= product.name %>">
+  </div>
+  <div class="pd-right">
+    <h1><%= product.name %></h1>
+    <div class="pd-price"><%= product.price.toLocaleString() %> ₫</div>
+    <p><strong>Tồn kho:</strong> <%= product.stock %></p>
+
+    <form action="/cart/add" method="post">
+      <input type="hidden" name="product_id" value="<%= product.id %>">
+      <label>Số lượng</label>
+      <input type="number" name="quantity" value="1" min="1">
+      <button class="btn">Thêm vào giỏ</button>
+    </form>
+
+    <h3>Mô tả</h3>
+    <p><%= product.description %></p>
+  </div>
+</div>

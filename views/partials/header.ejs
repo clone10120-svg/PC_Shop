@@ -1,0 +1,30 @@
+<header class="header">
+  <div class="container header-inner">
+    <div class="logo"><a href="/">PC SHOP</a></div>
+
+    <form class="search-form" action="/products" method="get">
+      <input name="q" placeholder="Tìm kiếm sản phẩm..." />
+      <button type="submit">🔍</button>
+    </form>
+
+    <div class="nav-actions">
+      <% if (!user) { %>
+        <a href="/auth/login">Đăng nhập</a>
+        <a href="/auth/register">Đăng ký</a>
+      <% } else { %>
+        <span>Hi, <%= user.username %></span>
+        <a href="/cart">🛒 Giỏ hàng</a>
+        <a href="/auth/logout">Logout</a>
+      <% } %>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <div class="container">
+      <a href="/category/pc-gaming">PC Gaming</a>
+      <a href="/category/laptop">Laptop</a>
+      <a href="/category/monitor">Màn hình</a>
+      <a href="/category/accessories">Phụ kiện</a>
+    </div>
+  </nav>
+</header>

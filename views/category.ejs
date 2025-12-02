@@ -1,0 +1,15 @@
+<h2 class="section-title">Danh mục: <%= categoryName %></h2>
+
+<div class="product-grid">
+  <% products.forEach(p => { %>
+    <div class="product-card">
+      <a href="/products/<%= p.slug %>">
+        <div class="product-thumb">
+          <img src="<%= p.image.startsWith('/') ? p.image : '/uploads/' + p.image %>" alt="<%= p.name %>">
+        </div>
+        <h3 class="product-name"><%= p.name %></h3>
+        <div class="product-price"><%= p.price.toLocaleString() %> ₫</div>
+      </a>
+    </div>
+  <% }) %>
+</div>

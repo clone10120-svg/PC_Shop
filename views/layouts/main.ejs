@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title || 'PC Shop' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/js/site.js"></script>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="container">
+    <% if (success && success.length) { %>
+      <div class="alert success"><%= success[0] %></div>
+    <% } %>
+    <% if (error && error.length) { %>
+      <div class="alert error"><%= error[0] %></div>
+    <% } %>
+
+    <%- body %>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
